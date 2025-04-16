@@ -3,7 +3,7 @@ name: Deploy Uniapp Crawler
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
