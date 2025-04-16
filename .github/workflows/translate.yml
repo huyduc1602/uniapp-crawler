@@ -95,7 +95,5 @@ jobs:
         fi
         
     - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.PAT }}
-        branch: ${{ github.ref }}
+      run: |
+        git push origin ${{ github.ref }}
