@@ -36,6 +36,9 @@ jobs:
     # Fetch the repository content
     - name: Checkout code
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     # Set up Docker environment for building images
     - name: Set up Docker
@@ -115,7 +118,7 @@ jobs:
       run: |
         docker-compose down
 
-    # Commit and push the generated docs to the repository
+    # Commit updates to docs
     - name: Commit updates to docs
       run: |
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -126,4 +129,10 @@ jobs:
         else
           git commit -m "Update docs with latest crawled content ($(date +'%Y-%m-%d'))" || echo "No changes to commit"
         fi
-        git push
+        
+    # Push changes using the GitHub token
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}

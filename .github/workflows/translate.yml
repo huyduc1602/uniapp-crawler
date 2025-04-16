@@ -18,6 +18,9 @@ on:
   schedule:
     - cron: '0 1 * * 3'
 
+permissions:
+  contents: write
+
 jobs:
   translate:
     runs-on: ubuntu-latest
@@ -26,6 +29,9 @@ jobs:
     # Fetch the repository content
     - name: Checkout code
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     # Add the translation API key to the environment file
     - name: Add DEEPL_API_KEY to environment
@@ -82,11 +88,11 @@ jobs:
         cp -r data/vi/* docs/ || echo "No files to copy"
         ls -la docs/
 
-    # Commit and push the generated docs to the repository
+    # Commit updates to docs
     - name: Commit updates to docs
       run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
         git add docs/ data/vi/
         if [ "${{ steps.translation_config.outputs.specific_file_requested }}" == "true" ]; then
           git commit -m "Translate specific file: ${{ github.event.inputs.specific_file }}" || echo "No changes to commit"
@@ -94,6 +100,9 @@ jobs:
           git commit -m "Update translations ($(date +'%Y-%m-%d'))" || echo "No changes to commit"
         fi
         
+    # Push changes using the GitHub token
     - name: Push changes
-      run: |
-        git push origin ${{ github.ref }}
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
