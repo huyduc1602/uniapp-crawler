@@ -6,7 +6,7 @@ services:
       - ./data:/app/data
     env_file:
       - .env
-    command: python app/crawler.py
+    command: python crawler.py
     environment:
       - MAX_DEPTH=${MAX_DEPTH:-5}
       - MAX_PAGES=${MAX_PAGES:-100}
@@ -17,4 +17,4 @@ services:
       - ./data:/app/data
     env_file:
       - .env
-    command: python app/translate.py
+    command: python translate.py
