@@ -26,31 +26,51 @@ def translate_text(text, source_lang, target_lang):
         try:
             translation = translator_google.translate(text, src=source_lang, dest=target_lang)
             if translation and translation.text:
-                return translation.text
+                return translation.text, True
             else:
-                print("Google Translate returned None. Falling back to original text.")
-                return text
+                print("Google Translate returned None. Translation failed.")
+                return None, False
         except Exception as e:
-            print(f"Google Translate API error: {e}. Falling back to original text.")
-            return text
+            print(f"Google Translate API error: {e}. Translation failed.")
+            return None, False
     else:
         print("Using DeepL API")
         try:
-            return translator.translate_text(text, source_lang=source_lang, target_lang=target_lang).text
+            result = translator.translate_text(text, source_lang=source_lang, target_lang=target_lang).text
+            return result, True
         except Exception as e:
-            print(f"DeepL API error: {e}. Falling back to original text.")
-            return text
+            print(f"DeepL API error: {e}. Translation failed.")
+            return None, False
 
 for filename in os.listdir(input_folder):
     if filename.endswith(".html"):
-        with open(f"{input_folder}/{filename}", "r", encoding="utf-8") as f:
-            html = f.read()
+        output_file_path = f"{output_folder}/{filename}"
+        
+        try:
+            with open(f"{input_folder}/{filename}", "r", encoding="utf-8") as f:
+                html = f.read()
 
-        soup = BeautifulSoup(html, 'html.parser')
-        body_text = soup.get_text()
+            soup = BeautifulSoup(html, 'html.parser')
+            body_text = soup.get_text()
 
-        print(f"Translating: {filename}")
-        result = translate_text(body_text, source_lang="ZH", target_lang="VI")
-
-        with open(f"{output_folder}/{filename}", "w", encoding="utf-8") as out:
-            out.write(result)
+            print(f"Translating: {filename}")
+            result, success = translate_text(body_text, source_lang="ZH", target_lang="VI")
+            
+            if success and result:
+                # Only create the file if translation was successful
+                with open(output_file_path, "w", encoding="utf-8") as out:
+                    out.write(result)
+                print(f"Successfully translated and saved: {filename}")
+            else:
+                # If translation failed and file exists, delete it
+                if os.path.exists(output_file_path):
+                    os.remove(output_file_path)
+                    print(f"Translation failed, deleted file: {filename}")
+                else:
+                    print(f"Translation failed, no file was created for: {filename}")
+        except Exception as e:
+            print(f"Error processing file {filename}: {e}")
+            # If any error occurs and file exists, delete it
+            if os.path.exists(output_file_path):
+                os.remove(output_file_path)
+                print(f"Error occurred, deleted file: {filename}")
