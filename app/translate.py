@@ -35,7 +35,11 @@ def translate_text(text, source_lang, target_lang):
             return text
     else:
         print("Using DeepL API")
-        return translator.translate_text(text, source_lang=source_lang, target_lang=target_lang).text
+        try:
+            return translator.translate_text(text, source_lang=source_lang, target_lang=target_lang).text
+        except Exception as e:
+            print(f"DeepL API error: {e}. Falling back to original text.")
+            return text
 
 for filename in os.listdir(input_folder):
     if filename.endswith(".html"):
