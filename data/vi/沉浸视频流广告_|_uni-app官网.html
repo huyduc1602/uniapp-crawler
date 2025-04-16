@@ -1,0 +1,134 @@
+Video phát trực tuyến quảng cáo | Trang web chính thức của UNI-APP
+
+
+
+
+
+
+
+
+
+
+
+
+
+uni-app
+uni-app x
+
+Unicloud
+
+HBuilder
+
+uni applet sdk
+
+Quảng cáo UNI-AD
+uni-ad uni-app
+uni-app x
+
+Unicloud
+
+HBuilder
+
+uni applet sdk
+
+Quảng cáo UNI-AD
+Tài liệu tìm kiếm đơn giản của Trung Quốc K UNI-AD Quảng cáo Kinh doanh Giới thiệu Mở màn hình mở Quảng cáo Thông tin (Banner) Quảng cáo quảng cáo video quảng cáo không giới tính Video Quảng cáo toàn màn hình video quảng cáo kẽ quảng cáo Video lưu lượng thông tin
+Nhóm truyền thông Uni-IM của Uni-AD:
+Bấm để tham gia
+Theo dõi giới thiệu tài khoản chính thức của WeChat đối với quảng cáo phát trực tuyến video nhập vai sẽ áp dụng các kịch bản #IMMERSIVE VIDEO STREAKING QUẢNG CÁO Hỗ trợ sử dụng trang ứng dụng-nvue. # Các kịch bản áp dụng: Các luồng video dọc như doumyin, video được xem trên toàn màn hình, chẳng hạn như chương trình cuộc gọi, phòng phát sóng trực tiếp, v.v ... Nguồn quảng cáo trên ứng dụng được cung cấp bởi Tencent Quảngn Đăng ký trong nền Uni-AD của Dcloud: https://uniad.dcloud.net.cn/ Sự khác biệt nền tảng Mô tả app-nvue h5 applet alipay applet badu applet doumin applet, feish Chi tiết quảng cáo của các bước để cho phép quảng cáo Thuộc tính Mô tả Tên thuộc tính Loại giá trị mặc định Mô tả nền tảng Bên cạnh Dữ liệu Dữ liệu tùy chọn Dữ liệu Quảng cáo tùy chọn, thông qua Plus.Ad.GetDrawads (tham khảo mã mẫu), ADPID sẽ không hợp lệ sau khi thiết lập ứng dụng Ứng dụng Ứng dụng adpid. {errcode:} Lưu ý: Sau khi nền tảng Android cập nhật SDK AD Pangolin (Toutiao), x86 loại CPU không còn được hỗ trợ và nó không thể chạy đến trình giả lập của X86 Loại CPU. HBuilderx Base Standard Máy thực sự chạy Kiểm tra Draw Thông tin Thông tin Định danh không gian quảng cáo (ADPID) là: 1507000690 @Error Mã lỗi Tập hợp pangolin của ứng dụng (IOS)
+<!-Chỉ hỗ trợ các trang NVUE->
+<!-Chiều rộng và chiều cao của ad-frad phải được chỉ định, nếu không kích thước là toàn màn hình->
+<xem class = "container">
+<ad-ré ra class = "ad-retrow" adpid = "1507000690"> </ad-retd>
+</Xem>
+</Template>
+
+<Script>
+xuất mặc định {
+data () {
+trở lại {
+}
+},
+Phương pháp: {
+}
+}
+</script>
+
+<Phong cách>
+.Container {
+Flex: 1;
+}
+
+.Ad-RAPLED {
+Flex: 1;
+Chiều rộng: 750RPX;
+}
+</Style>
+
+Ví dụ 2 <Mẫu>
+<!-Chỉ hỗ trợ các trang NVUE->
+<xem class = "nội dung">
+<xem class = "ad-retpress">
+<ad-retraw: data = "addata" @load = "onload" @error = "onError"> </ad-retrow>
+</Xem>
+</Xem>
+</Template>
+
+<Script>
+xuất mặc định {
+data () {
+trở lại {
+Tiêu đề: 'ad-aprit',
+addata: {}
+}
+},
+onready: function (e) {
+this.getAddata ()
+},
+Phương pháp: {
+getaddata: function (e) {
+// chỉ được hỗ trợ bởi nền tảng ứng dụng
+plus.ad.getDrawads ({
+ADPID: '1507000690', // Logo khe quảng cáo này chỉ có giá trị trong việc lắp ghép tiêu chuẩn HBuilderx và chỉ được sử dụng để kiểm tra
+Đếm: 1, // Số lượng quảng cáo, mặc định 1-3
+Chiều rộng: 300, // Nhận quảng cáo thích hợp dựa trên chiều rộng (đơn vị PX)
+Chiều cao: 300 // Có được quảng cáo phù hợp dựa trên chiều cao (đơn vị PX)
+},
+(res) => {
+this.addata = res.ads [0];
+console.log (this.addata);
+},
+(err) => {
+Console.log (err);
+}
+)
+},
+onload (e) {
+Console.log ("onload", e);
+},
+onerror (e) {
+Console.log ("onerror:" + e.detail.errcode + "tin nhắn ::" + e.detail.errmsg);
+}
+}
+}
+</script>
+Quảng cáo phát trực tuyến video nhập vai không phải là một quảng cáo video khuyến khích. Xem thêm: https://uniapp.dcloud.io/uni-ad/ad-ededed-video Lưu ý rằng ứng dụng cấu hình nền tảng iOS sử dụng logo quảng cáo (IDFA) để biết chi tiết: https://ask.dcloud.net.cn/article/36107 https://ask.dcloud.net.cn/article/36769 Ngoài thành phần AD và thành phần rút tiền, phía ứng dụng cũng hỗ trợ các biểu mẫu quảng cáo khác nhau như màn hình mở, video khuyến khích và quảng cáo toàn màn hình. Để biết chi tiết, vui lòng xem trang web chính thức của Uni-AD. Ứng dụng UNI-AD UNI-AD tổng hợp Tencent Guangdiantong, Toutiao Pangolin, liên minh quảng cáo 360 và các dịch vụ khác. Khi đóng gói, bạn phải kiểm tra SDK tương ứng. Để biết chi tiết, vui lòng xem: https://ask.dcloud.net.cn/article/36718 Mã lỗi Mã lỗi liên quan đến sự cố vấn đề giúp chúng tôi cải thiện trang này!   Cập nhật lần cuối: 2025/4/11 19:55:51 Sản phẩm phát triển HBuilderXuni-appuni-app XunicloudUnImpsdK5+RunTimeWap2AppMuiuni-iduni-cdnuni-payuni-pushuni-one-blick Smsuni-starteruni-adminuni nâng cấp-centeruni-iMuni-aaini-cmsunicloud-mapuni-search sản xuất sản phẩm uni-aduni thống kê uni-aduni bảo mật nhà phát triển
+Trang web chính thức của Dcloud
+
+Trường hợp
+
+Nhu cầu tường
+
+Thỏa thuận cấp phép
+
+Tham gia với chúng tôi
+
+Được tài trợ bởi chúng tôi
+Liên hệ với chúng tôi:
+Hợp tác kinh doanh: bd@dcloud.io
+
+Hợp tác quảng cáo: uniad@dcloud.io
+Dcloud.io Paradise Paradise (Bắc Kinh) Công ty TNHH Công ty TNHH HTML5 Trung Quốc Liên minh Công nghiệp Trung Quốc
+Đơn vị khởi xướng
+
+Mạng an ninh công cộng Bắc Kinh số 11010802035340 Bảo vệ cấp bảo mật thông tin quốc gia Cấp độ 3, Số chứng chỉ: 11010813802-20001 Giới thiệu về trang này Giới thiệu về Video phát trực tuyến Các kịch bản áp dụng

@@ -1,0 +1,147 @@
+Thành phần liên minh nội dung video ngắn | Trang web chính thức của UNI-APP
+
+
+
+
+
+
+
+
+
+
+
+
+
+uni-app
+uni-app x
+
+Unicloud
+
+HBuilder
+
+uni applet sdk
+
+Quảng cáo UNI-AD
+uni-ad uni-app
+uni-app x
+
+Unicloud
+
+HBuilder
+
+uni applet sdk
+
+Quảng cáo UNI-AD
+Tài liệu tìm kiếm đơn giản của Trung Quốc K UNI-AD Quảng cáo Kinh doanh Giới thiệu Mở màn hình mở Quảng cáo Thông tin (Banner) Quảng cáo quảng cáo video quảng cáo không giới tính Video Quảng cáo toàn màn hình video quảng cáo kẽ quảng cáo Video lưu lượng thông tin
+Nhóm truyền thông Uni-IM của Uni-AD:
+Bấm để tham gia
+Theo dõi tài khoản công cộng WeChat Nội dung video ngắn liên minh Liên minh Giới thiệu Thành phần API Kịch ngắn Pangolin Chuẩn bị bộ phim truyền hình ngắn hạn trước khi phát triển # Nội dung video ngắn Liên minh Thành phần # Giới thiệu Kênh nội dung video hỗ trợ SwiPing applet JD Applet JD Applet ✓ X X X X X X X X X X X X X X X X MỞ và Định cấu hình chi tiết quảng cáo để mở các bước quảng cáo Lưu ý: Bạn phải chọn Liên minh nội dung Kuaishou khi đóng gói. HBuilder dock kiểm tra quảng cáo quảng cáo quảng cáo quảng cáo là 11111111112 # chỉ có hỗ trợ NVUE (hỗ trợ iOS-HX3.4.2, Android-HX3.1.17 Hỗ trợ) Mô tả thuộc tính Tên loại giá trị mặc định Khi phát bắt đầu 3.4.3+ @pause EventHandle được kích hoạt khi tạm dừng 3.4.3+ @Resume EventHandle được kích hoạt khi tiếp tục phát lại 3.4.3+ @Complete EventHandle Trình kích hoạt khi phát lại 34.3+ Tổng số thời lượng video Ví dụ: <Mmplate>
+<xem class = "nội dung">
+<ad-content-page class = "ad-intent-page" ref = "adcontentPage" adpid = "1111111112" @load = "onadload" @error = "onAdError"> </ad-content-page>
+</Xem>
+</Template>
+
+<Script>
+xuất mặc định {
+data () {
+trở lại {
+Tiêu đề: 'Tương tự quảng cáo'
+}
+},
+onshow () {
+this. $ nextTick (() => {
+// Phương thức hiển thị của thành phần quảng cáo cần được gọi khi trang được hiển thị
+này. $ refs.adcontentPage.show ();
+})
+},
+on -onl () {
+// Bạn cần gọi phương thức ẩn của thành phần quảng cáo khi trang bị ẩn và dừng âm thanh của nội dung quảng cáo
+This. $ refs.adcontentPage.hide ();
+},
+Phương pháp: {
+onadload (e) {
+Console.log ("onadload", e);
+},
+onaderror (e) {
+Console.log ("OnAdError", e);
+}
+}
+}
+</script>
+
+<Phong cách>
+.nội dung {
+Flex: 1
+}
+
+.ad-content-page {
+Flex: 1
+}
+</Style>
+Lưu ý: Phương thức ẩn của thành phần cần được gọi khi trang được ẩn để dừng âm thanh của nội dung quảng cáo. 3.4.17+ Nền tảng iOS do hạn chế của các nhà quảng cáo, gọi phương thức chương trình hoặc ẩn cần phải hợp lệ sau khi ứng dụng. Để biết chi tiết, uniad@dcloud.io # API sẽ mở một thành phần toàn màn hình gốc sau khi được gọi qua API và kích thước là không thể kiểm soát được. Cú pháp Plus.ad.ShowContentPage (Tùy chọn, Thành công, FAIL) Mô tả tham số Tùy chọn là loại đối tượng, các thuộc tính như sau: Tên thuộc tính Loại Mô tả ADPID Có Quảng cáo Vị trí ID chuỗi nền không
+<Xem>
+không
+</Xem>
+</Template>
+
+<Script>
+xuất mặc định {
+data () {
+trở lại {
+Đang tải: Sai
+}
+},
+onload () {
+// HBuilderx Dock Standard Real Chạy Nội dung kiểm tra Logo không gian quảng cáo (ADPID) là: 11111111112
+// ADPID: 111111112 chỉ được sử dụng để thử nghiệm. Nó cần được áp dụng cho nền AD (https://uniad.dcloud.net.cn/) khi xuất bản.
+// Không gian quảng cáo (ADPID) được áp dụng trong nền quảng cáo cần được tùy chỉnh / đóng gói đám mây / đóng gói cục bộ để có hiệu lực
+
+this.adoptions = {
+ADPID: 11111111112
+}
+},
+Phương pháp: {
+showad () {
+if (this.loading == true) {
+trở lại;
+}
+
+this.loading = true;
+plus.ad.ShowContentPage (this.adoptions, (res) => {
+this.loading = false;
+}, (err) => {
+this.loading = false;
+Console.log (err);
+});
+}
+}
+}
+</script>
+Mã lỗi Mã liên quan đến Khắc phục sự cố #Short #Short # Pangolin Short Drama Vì Uni-AD chưa hỗ trợ các bộ phim truyền hình ngắn pangolin, việc truy cập chức năng kịch ngắn đòi hỏi tài liệu phát triển của trình cắm UTS để phát triển trình cắm kịch ngắn tương ứng. # Chuẩn bị trước khi phát triển Ứng dụng mở UNI-AD và lưu trữ thành công tài khoản Pangolin. Nâng cấp HBuilderx lên phiên bản 4.34. # Ghi chú Trong quá trình phát triển Trình cắm phát ngắn không thể bao gồm các API liên quan đến quảng cáo pangolin, bao gồm API khởi tạo của SDK quảng cáo pangolin. Các phụ thuộc liên quan đến SDK quảng cáo pangolin không thể được bao gồm trong config.json, nếu không nó sẽ gây ra lỗi bao bì. Khi đóng gói, bạn cần kiểm tra mô -đun Gromore Pangolin. SDK quảng cáo pangolin không thể được bao gồm trong trình cắm, nếu không bao bì sẽ thất bại do xung đột SDK. Để đảm bảo khởi tạo thành công các bộ phim truyền hình ngắn, bạn cần gọi bất kỳ API quảng cáo nào trước khi khởi tạo các bộ phim truyền hình ngắn Pangolin, và sau đó khởi tạo các bộ phim truyền hình ngắn Pangolin sau khi kích hoạt gọi lại AD. Ví dụ tham khảo: var kẽ
+xen kẽ.Onload (() => {
+// khởi tạo bộ phim ngắn
+});
+xen kẽ.onerror ((err) => {
+// khởi tạo bộ phim ngắn
+});
+xen kẽ.Load ()
+Vì chương trình ngắn Pangolin hiện yêu cầu thêm địa chỉ kho lưu trữ riêng của Pangolin, HBuilderX không hỗ trợ cấu hình cho thời điểm hiện tại. Trước tiên, các nhà phát triển nên gói gọn chức năng phim truyền hình ngắn vào thư viện trong Android Studio và cung cấp một số API bên ngoài cho trình cắm UTS để gọi. Nếu bạn gặp sự cố trong quá trình phát triển trình cắm, bạn có thể đến nhóm quảng cáo UNI-AD để tham khảo ý kiến. Giúp chúng tôi cải thiện trang này!   Cập nhật lần cuối: 2025/4/11 19:55:51 Sản phẩm phát triển HBuilderXuni-appuni-app XunicloudUnImpsdK5+RunTimeWap2AppMuiuni-iduni-cdnuni-payuni-pushuni-one-blick Smsuni-starteruni-adminuni nâng cấp-centeruni-iMuni-aaini-cmsunicloud-mapuni-search sản xuất sản phẩm uni-aduni thống kê uni-aduni bảo mật nhà phát triển
+Trang web chính thức của Dcloud
+
+Trường hợp
+
+Nhu cầu tường
+
+Thỏa thuận cấp phép
+
+Tham gia với chúng tôi
+
+Được tài trợ bởi chúng tôi
+Liên hệ với chúng tôi:
+Hợp tác kinh doanh: bd@dcloud.io
+
+Hợp tác quảng cáo: uniad@dcloud.io
+Dcloud.io Paradise Paradise (Bắc Kinh) Công ty TNHH Công ty TNHH HTML5 Trung Quốc Liên minh Công nghiệp Trung Quốc
+Đơn vị khởi xướng
+
+Mạng an ninh công cộng Bắc Kinh số 11010802035340 Bảo vệ cấp thông tin quốc gia Cấp độ bảo vệ cấp 3, Số chứng chỉ: 11010813802-20001 Giới thiệu về trang này Nội dung video ngắn Giới thiệu Thành phần API KẾT HỢP PHẦN
