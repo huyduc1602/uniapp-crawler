@@ -93,4 +93,9 @@ jobs:
         else
           git commit -m "Update translations ($(date +'%Y-%m-%d'))" || echo "No changes to commit"
         fi
-        git push
+        
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.PAT }}
+        branch: ${{ github.ref }}
