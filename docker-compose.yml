@@ -10,6 +10,7 @@ services:
     environment:
       - MAX_DEPTH=${MAX_DEPTH:-5}
       - MAX_PAGES=${MAX_PAGES:-100}
+      - PYTHONPATH=/app
   
   translator:
     build: .
@@ -18,3 +19,5 @@ services:
     env_file:
       - .env
     command: python translate.py
+    environment:
+      - PYTHONPATH=/app
