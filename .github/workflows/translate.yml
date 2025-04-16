@@ -1,0 +1,146 @@
+name: Translate Documentation
+
+on:
+  # Run on manual trigger with options
+  workflow_dispatch:
+    inputs:
+      force_retranslate:
+        description: 'Force retranslate all documents'
+        required: false
+        default: 'false'
+        type: boolean
+      specific_file:
+        description: 'Specific file to translate (leave empty for all files)'
+        required: false
+        type: string
+  
+  # Run on schedule - Every Wednesday at 01:00 UTC
+  schedule:
+    - cron: '0 1 * * 3'
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Fetch the repository content
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Add the translation API key to the environment file
+    - name: Add DEEPL_API_KEY to environment
+      run: echo "DEEPL_API_KEY=${{ secrets.DEEPL_API_KEY }}" >> .env
+
+    # Install Python dependencies required by the translator
+    - name: Install Python dependencies
+      run: |
+        pip install -r app/requirements.txt
+
+    # Ensure docker-compose is available
+    - name: Install docker-compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
+      
+    # Check if specific file translation is requested
+    - name: Configure translation settings
+      id: translation_config
+      run: |
+        if [ -n "${{ github.event.inputs.specific_file }}" ]; then
+          echo "SPECIFIC_FILE=${{ github.event.inputs.specific_file }}" >> .env
+          echo "specific_file_requested=true" >> $GITHUB_OUTPUT
+        else
+          echo "specific_file_requested=false" >> $GITHUB_OUTPUT
+        fi
+        
+        if [ "${{ github.event.inputs.force_retranslate }}" == "true" ]; then
+          echo "FORCE_RETRANSLATE=true" >> .env
+        fi
+
+    # Modify the translate.py script for specific file if requested
+    - name: Prepare for specific file translation
+      if: steps.translation_config.outputs.specific_file_requested == 'true'
+      run: |
+        echo "Preparing to translate specific file: ${{ github.event.inputs.specific_file }}"
+        # Create a temporary script for single file translation
+        cat > app/translate_specific.py << EOF
+import os
+from bs4 import BeautifulSoup, NavigableString
+import deepl
+from dotenv import load_dotenv
+import time
+import sys
+
+# Import translation functions from the main script
+from translate import translate_text, translate_html_element
+
+load_dotenv()
+specific_file = os.getenv('SPECIFIC_FILE')
+input_folder = "data/zh"
+output_folder = "data/vi"
+
+if not specific_file:
+    print("No specific file provided")
+    sys.exit(1)
+    
+input_file = f"{input_folder}/{specific_file}"
+output_file = f"{output_folder}/{specific_file}"
+
+if not os.path.exists(input_file):
+    print(f"File {input_file} does not exist")
+    sys.exit(1)
+
+print(f"Translating specific file: {specific_file}")
+
+try:
+    with open(input_file, "r", encoding="utf-8") as f:
+        html_content = f.read()
+
+    # Parse the HTML
+    soup = BeautifulSoup(html_content, 'html.parser')
+    
+    # Translate the body content while preserving HTML structure
+    translated_soup = translate_html_element(soup, source_lang="ZH", target_lang="VI")
+    
+    # Save the translated HTML with preserved structure
+    if translated_soup:
+        with open(output_file, "w", encoding="utf-8") as out:
+            out.write(str(translated_soup))
+        print(f"Successfully translated and saved: {specific_file}")
+    else:
+        print(f"Translation failed for: {specific_file}")
+        
+except Exception as e:
+    print(f"Error processing file {specific_file}: {e}")
+EOF
+
+    # Run translator service for all files or specific file
+    - name: Run translator
+      run: |
+        if [ "${{ steps.translation_config.outputs.specific_file_requested }}" == "true" ]; then
+          echo "Translating specific file..."
+          python app/translate_specific.py
+        else
+          echo "Running translator for all files..."
+          docker-compose up --build translator
+        fi
+
+    # Copy translated files to the docs folder for GitHub Pages
+    - name: Copy translated documents to docs folder
+      run: |
+        mkdir -p docs
+        cp -r data/vi/* docs/ || echo "No files to copy"
+        ls -la docs/
+
+    # Commit and push the generated docs to the repository
+    - name: Commit updates to docs
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add docs/ data/vi/
+        if [ "${{ steps.translation_config.outputs.specific_file_requested }}" == "true" ]; then
+          git commit -m "Translate specific file: ${{ github.event.inputs.specific_file }}" || echo "No changes to commit"
+        else
+          git commit -m "Update translations ($(date +'%Y-%m-%d'))" || echo "No changes to commit"
+        fi
+        git push

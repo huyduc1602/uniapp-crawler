@@ -15,6 +15,11 @@ on:
         required: false
         default: false
         type: boolean
+      force_retranslate:
+        description: 'Run translation after crawling'
+        required: false
+        default: false
+        type: boolean
   
   # Run on schedule (cronjob) - Every Monday at 01:00 UTC
   schedule:
@@ -77,9 +82,20 @@ jobs:
       run: |
         echo "Running crawler..."
         docker-compose up --build crawler
+        
+    # Check if translation is needed
+    - name: Check if translation is needed
+      id: check_translation
+      run: |
+        if [ "${{ github.event.inputs.force_retranslate }}" == "true" ]; then
+          echo "need_translation=true" >> $GITHUB_OUTPUT
+        else
+          echo "need_translation=false" >> $GITHUB_OUTPUT
+        fi
       
-    # Always run translator service
-    - name: Run translator
+    # Run translator service only if force_retranslate is true
+    - name: Run translator (if needed)
+      if: steps.check_translation.outputs.need_translation == 'true'
       run: |
         echo "Running translator..."
         docker-compose up --build translator
@@ -102,5 +118,9 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add docs/
-        git commit -m "Update docs with latest translations ($(date +'%Y-%m-%d'))" || echo "No changes to commit"
+        if [ "${{ steps.check_translation.outputs.need_translation }}" == "true" ]; then
+          git commit -m "Update docs with latest translations ($(date +'%Y-%m-%d'))" || echo "No changes to commit"
+        else
+          git commit -m "Update docs with latest crawled content ($(date +'%Y-%m-%d'))" || echo "No changes to commit"
+        fi
         git push
