@@ -25,6 +25,10 @@ jobs:
     - name: Add DEEPL_API_KEY to environment
       run: echo "DEEPL_API_KEY=${{ secrets.DEEPL_API_KEY }}" >> .env
 
+    - name: Install Python dependencies
+      run: |
+        pip install -r app/requirements.txt
+
     - name: Copy translated documents to docs folder
       run: |
         mkdir -p docs
