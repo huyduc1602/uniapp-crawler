@@ -20,7 +20,10 @@ os.makedirs(output_folder, exist_ok=True)
 def translate_text(text, source_lang, target_lang):
     if use_google_translate:
         print("Using Google Translate API")
-        return translator_google.translate(text, src=source_lang.lower(), dest=target_lang.lower()).text
+        # Correct the language code for Google Translate
+        source_lang = "zh-cn" if source_lang.lower() == "zh" else source_lang.lower()
+        target_lang = target_lang.lower()
+        return translator_google.translate(text, src=source_lang, dest=target_lang).text
     else:
         print("Using DeepL API")
         return translator.translate_text(text, source_lang=source_lang, target_lang=target_lang).text
