@@ -64,56 +64,6 @@ jobs:
         echo "Preparing to translate specific file: ${{ github.event.inputs.specific_file }}"
         # Create a temporary script for single file translation
         cat > app/translate_specific.py << EOF
-import os
-from bs4 import BeautifulSoup, NavigableString
-import deepl
-from dotenv import load_dotenv
-import time
-import sys
-
-# Import translation functions from the main script
-from translate import translate_text, translate_html_element
-
-load_dotenv()
-specific_file = os.getenv('SPECIFIC_FILE')
-input_folder = "data/zh"
-output_folder = "data/vi"
-
-if not specific_file:
-    print("No specific file provided")
-    sys.exit(1)
-    
-input_file = f"{input_folder}/{specific_file}"
-output_file = f"{output_folder}/{specific_file}"
-
-if not os.path.exists(input_file):
-    print(f"File {input_file} does not exist")
-    sys.exit(1)
-
-print(f"Translating specific file: {specific_file}")
-
-try:
-    with open(input_file, "r", encoding="utf-8") as f:
-        html_content = f.read()
-
-    # Parse the HTML
-    soup = BeautifulSoup(html_content, 'html.parser')
-    
-    # Translate the body content while preserving HTML structure
-    translated_soup = translate_html_element(soup, source_lang="ZH", target_lang="VI")
-    
-    # Save the translated HTML with preserved structure
-    if translated_soup:
-        with open(output_file, "w", encoding="utf-8") as out:
-            out.write(str(translated_soup))
-        print(f"Successfully translated and saved: {specific_file}")
-    else:
-        print(f"Translation failed for: {specific_file}")
-        
-except Exception as e:
-    print(f"Error processing file {specific_file}: {e}")
-EOF
-
     # Run translator service for all files or specific file
     - name: Run translator
       run: |
