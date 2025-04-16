@@ -5,7 +5,7 @@ import os
 import time
 from requests.exceptions import ChunkedEncodingError
 
-BASE_URL = 'https://uniapp.dcloud.io/'
+BASE_URL = 'https://uniapp.dcloud.net.cn/'
 OUTPUT_DIR = 'data/zh'
 
 visited = set()
@@ -13,9 +13,15 @@ visited = set()
 def is_internal_link(href):
     return href and urlparse(href).netloc in ('', 'uniapp.dcloud.io')
 
-def save_page(title, content):
-    safe_title = title.replace('/', '_').replace(' ', '_')
-    with open(f"{OUTPUT_DIR}/{safe_title}.html", "w", encoding='utf-8') as f:
+def save_page(title, content, url):
+    if url.rstrip('/') == 'https://uniapp.dcloud.net.cn' or url.rstrip('/') == 'https://uniapp.dcloud.io':
+        # Nếu là đường dẫn gốc, đặt tên file là index.html
+        filename = "index"
+    else:
+        # Nếu không phải đường dẫn gốc, sử dụng title làm tên file
+        filename = title.replace('/', '_').replace(' ', '_')
+    
+    with open(f"{OUTPUT_DIR}/{filename}.html", "w", encoding='utf-8') as f:
         f.write(content)
 
 def crawl_page(url, depth=0, max_depth=10):
@@ -50,7 +56,7 @@ def crawl_page(url, depth=0, max_depth=10):
     soup = BeautifulSoup(res.text, 'html.parser')
 
     title = soup.title.string if soup.title else "untitled"
-    save_page(title, res.text)
+    save_page(title, res.text, url)
 
     for a_tag in soup.find_all('a', href=True):
         href = a_tag['href']
