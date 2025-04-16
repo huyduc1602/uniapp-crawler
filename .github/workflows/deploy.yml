@@ -29,6 +29,11 @@ jobs:
       run: |
         pip install -r app/requirements.txt
 
+    - name: Install docker-compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
+
     - name: Copy translated documents to docs folder
       run: |
         mkdir -p docs
