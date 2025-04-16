@@ -1,11 +1,20 @@
 version: '3'
 services:
-  translator:
-    build:
-      context: ./translator
-    environment:
-      - DEEPL_API_KEY=${DEEPL_API_KEY}
+  crawler:
+    build: .
     volumes:
-      - ./data:/data
-    depends_on:
-      - crawler
+      - ./data:/app/data
+    env_file:
+      - .env
+    command: python app/crawler.py
+    environment:
+      - MAX_DEPTH=${MAX_DEPTH:-5}
+      - MAX_PAGES=${MAX_PAGES:-100}
+  
+  translator:
+    build: .
+    volumes:
+      - ./data:/app/data
+    env_file:
+      - .env
+    command: python app/translate.py
