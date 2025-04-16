@@ -23,7 +23,16 @@ def translate_text(text, source_lang, target_lang):
         # Correct the language code for Google Translate
         source_lang = "zh-cn" if source_lang.lower() == "zh" else source_lang.lower()
         target_lang = target_lang.lower()
-        return translator_google.translate(text, src=source_lang, dest=target_lang).text
+        try:
+            translation = translator_google.translate(text, src=source_lang, dest=target_lang)
+            if translation and translation.text:
+                return translation.text
+            else:
+                print("Google Translate returned None. Falling back to original text.")
+                return text
+        except Exception as e:
+            print(f"Google Translate API error: {e}. Falling back to original text.")
+            return text
     else:
         print("Using DeepL API")
         return translator.translate_text(text, source_lang=source_lang, target_lang=target_lang).text

@@ -25,6 +25,14 @@ def crawl_page(url, depth=0, max_depth=10):
 
     if url in visited:
         return
+
+    # Check if the file already exists
+    safe_title = url.split('/')[-1].replace('/', '_').replace(' ', '_')
+    file_path = f"{OUTPUT_DIR}/{safe_title}.html"
+    if os.path.exists(file_path):
+        print(f"File already exists for URL: {url}, skipping crawl.")
+        return
+
     print(f'Crawling: {url}')
     visited.add(url)
 
