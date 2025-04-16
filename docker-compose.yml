@@ -1,8 +1,11 @@
 version: '3'
 services:
-  crawler:
-    build: .
+  translator:
+    build:
+      context: ./translator
+    environment:
+      - DEEPL_API_KEY=${DEEPL_API_KEY}
     volumes:
-      - ./data:/app/data
-    env_file:
-      - .env
+      - ./data:/data
+    depends_on:
+      - crawler
