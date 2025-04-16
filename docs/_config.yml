@@ -1,0 +1,19 @@
+# Basic configuration for GitHub Pages
+baseurl: "" # Base URL for the site
+url: "https://huyduc1602.github.io/uniapp-crawler" # Replace with your GitHub Pages URL
+theme: jekyll-theme-primer
+
+# Exclude unnecessary files from the build
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+
+# Enable plugins
+plugins:
+  - jekyll-seo-tag
+  - jekyll-paginate
+  - jekyll-relative-links
+  - jekyll-readme-index
+  - jekyll-default-layout
+  - jekyll-titles-from-headings
