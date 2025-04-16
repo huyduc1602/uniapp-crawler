@@ -3,6 +3,7 @@ name: Deploy Uniapp Crawler
 on:
   push:
     branches:
+      - main
       - master
 
 jobs:
@@ -34,15 +35,24 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y docker-compose
 
+    - name: Build and run Docker image
+      run: |
+        docker-compose up --build
+
     - name: Copy translated documents to docs folder
       run: |
         mkdir -p docs
         cp -r data/vi/* docs/
-
-    - name: Build and push Docker image
-      run: |
-        docker-compose up --build
+        ls -la docs/
 
     - name: Clean up
       run: |
         docker-compose down
+
+    - name: Commit updates to docs
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add docs/
+        git commit -m "Update docs with latest translations" || echo "No changes to commit"
+        git push

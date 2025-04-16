@@ -1,6 +1,6 @@
 # Basic configuration for GitHub Pages
-baseurl: "" # Base URL for the site
-url: "https://huyduc1602.github.io/uniapp-crawler" # Replace with your GitHub Pages URL
+baseurl: "/uniapp-crawler" # Base URL for the site
+url: "https://huyduc1602.github.io" # Replace with your GitHub Pages URL
 theme: jekyll-theme-primer
 
 # Exclude unnecessary files from the build
