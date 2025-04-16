@@ -1,10 +1,24 @@
 name: Deploy Uniapp Crawler
 
 on:
+  # Run on push to main or master branch
   push:
     branches:
       - main
       - master
+  
+  # Run on manual trigger
+  workflow_dispatch:
+    inputs:
+      force_crawl:
+        description: 'Force crawl even if data already exists'
+        required: false
+        default: false
+        type: boolean
+  
+  # Run on schedule (cronjob) - Every Monday at 01:00 UTC
+  schedule:
+    - cron: '0 1 * * 1'
 
 jobs:
   deploy:
@@ -29,6 +43,12 @@ jobs:
     # Add the translation API key to the environment file
     - name: Add DEEPL_API_KEY to environment
       run: echo "DEEPL_API_KEY=${{ secrets.DEEPL_API_KEY }}" >> .env
+      
+    # Add crawling limits to environment file
+    - name: Configure crawling limits
+      run: |
+        echo "MAX_DEPTH=3" >> .env
+        echo "MAX_PAGES=50" >> .env
 
     # Install Python dependencies required by the crawler and translator
     - name: Install Python dependencies
@@ -41,16 +61,34 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y docker-compose
 
-    # Build and run the crawler and translator in Docker
-    - name: Build and run Docker image
+    # Run only crawler if data/zh is empty or force_crawl flag is set
+    - name: Check if crawling is needed
+      id: check_crawling
       run: |
-        docker-compose up --build
+        if [ -z "$(ls -A data/zh 2>/dev/null)" ] || [ "${{ github.event.inputs.force_crawl }}" == "true" ] || [ "${{ github.event_name }}" == "schedule" ]; then
+          echo "need_crawling=true" >> $GITHUB_OUTPUT
+        else
+          echo "need_crawling=false" >> $GITHUB_OUTPUT
+        fi
+
+    # Run only crawler service if needed
+    - name: Run crawler (if needed)
+      if: steps.check_crawling.outputs.need_crawling == 'true'
+      run: |
+        echo "Running crawler..."
+        docker-compose up --build crawler
+      
+    # Always run translator service
+    - name: Run translator
+      run: |
+        echo "Running translator..."
+        docker-compose up --build translator
 
     # Copy translated files to the docs folder for GitHub Pages
     - name: Copy translated documents to docs folder
       run: |
         mkdir -p docs
-        cp -r data/vi/* docs/
+        cp -r data/vi/* docs/ || echo "No files to copy"
         ls -la docs/
 
     # Stop and remove Docker containers
@@ -64,5 +102,5 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add docs/
-        git commit -m "Update docs with latest translations" || echo "No changes to commit"
+        git commit -m "Update docs with latest translations ($(date +'%Y-%m-%d'))" || echo "No changes to commit"
         git push
